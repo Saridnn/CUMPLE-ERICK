@@ -235,8 +235,8 @@ h2{font-size:clamp(1.6rem,4.5vw,2.2rem);margin-bottom:1rem}
   <div class="papel rev">
     <span class="cinta v"></span>
     <svg class="dec lazo" style="top:-26px;left:14px" aria-hidden="true"><use href="#lazo"/></svg>
-    <h2>Tenemos algo para ti</h2>
-    <p style="margin-bottom:1.4rem">Pulsa el botón cuando estés listo.</p>
+    <h2>Tengo algo para ti</h2>
+    <p style="margin-bottom:1.4rem">Pulsa el botón cuando estés lista.</p>
     <button class="btn" id="abrir">Abrir regalo</button>
     <div class="sorpresa" id="sorpresa" aria-live="polite">
       <p class="mano" id="textoSorpresa" style="font-size:1.9rem"></p>
@@ -408,6 +408,13 @@ if (CONTENIDO.musica) {
     if (a.paused) { a.play().catch(() => {}); b.textContent = '❚❚'; b.setAttribute('aria-label', 'Pausar música'); }
     else { a.pause(); b.textContent = '♪'; b.setAttribute('aria-label', 'Reproducir música'); }
   });
+  /* Los navegadores no dejan sonar música antes de que la persona toque la página:
+     arranca sola con el primer toque (por ejemplo en "Continuar"). El botón ♪ sirve para pausar. */
+  const iniciar = () => {
+    if (!a.paused) return;
+    a.play().then(() => { b.textContent = '❚❚'; b.setAttribute('aria-label', 'Pausar música'); }).catch(() => {});
+  };
+  ['click', 'touchend'].forEach(ev => document.addEventListener(ev, iniciar, {once: true}));
 }
 </script>
 </body>
